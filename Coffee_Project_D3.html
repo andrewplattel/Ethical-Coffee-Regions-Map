@@ -208,7 +208,7 @@
         
         .region {
             stroke: grey;
-            stroke-width: 1px;
+            stroke-width: 0.5px;
             transition: fill-opacity 0.2s;
             will-change: fill-opacity;
         }
@@ -397,6 +397,122 @@
             background: #6B4A2E;
         }
 
+        #metrics-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .metrics-details-content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .metrics-details-content h2 {
+            margin-top: 0;
+            color: #875E3E;
+        }
+
+        .metric-detail {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .metric-detail:last-child {
+            border-bottom: none;
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f9f9f9;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .metric-header:hover {
+            background: #f0f0f0;
+        }
+
+        .metric-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 16px;
+            flex: 1;
+        }
+
+        .metric-toggle {
+            color: #875E3E;
+            font-size: 20px;
+            font-weight: bold;
+            width: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .metric-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .metric-content {
+            display: none;
+            padding: 0 15px 15px 15px;
+            background: white;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .metric-content.open {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
+        }
+
+        .metric-content p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .metrics-details-close {
+            padding: 10px 20px;
+            background: #875E3E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .metrics-details-close:hover {
+            background: #6B4A2E;
+        }
+
         #welcome-modal {
             display: flex;
             position: fixed;
@@ -580,12 +696,122 @@
         <div class="sources-content">
             <h2>Sources</h2>
             <ul>
-                <li>Coffee Quality Database - Arabica Data</li>
-                <li>World GeoJSON - Country boundaries</li>
-                <li>Coffee Regions GeoJSON - Regional boundaries</li>
-                <li>Ethical Coffee Organizations - Certifications</li>
+                <li>Coffee Quality Data: <a href="https://github.com/jldbc/coffee-quality-database" target="_blank">Coffee Quality Database GitHub</a> (originally sourced from the <a href="https://database.coffeeinstitute.org/" target="_blank">Coffee Quality Institute</a>)</li>
+                <li>Global and Regional GeoJSON Data: <a href="https://gadm.org/download_country.html#google_vignette" target="_blank">GADM</a></li>
+                <li>Ethical Country Data: <a href="https://icocoffee.org/global-knowledge-hub/sustainability-dashboards/index.html" target="_blank">Coffee Sustainability Initiatives Map</a></li>
+                <li>Coffee Metrics Descriptions: <a href="https://database.coffeeinstitute.org/coffee/333644/grade" target="_blank">Coffee Quality Institute</a></li>
+                
+                <p>I used AI (specifically <a href="https://claude.ai" target="_blank">Claude</a>) in this project to assist me in creating some of the D3 code in this project. I had never used D3, Java or any HTML before this project. All design choices I implemented myself and I can happily say I learned a lot about HTML during this project. <a href="" target="_blank">Here</a> is a link to my open respository with all code required to create this dashboard. </p>
             </ul>
             <button class="sources-close" onclick="window.coffeeMapInstance.closeSources()">Close</button>
+        </div>
+    </div>
+
+    <div id="metrics-details-modal">
+        <div class="metrics-details-content">
+            <h2>Coffee Quality Metrics</h2>
+            
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Aroma</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>The aromatic aspects include Fragrance (defined as the smell of the ground coffee when still dry) and Aroma (the smell of the coffee when infused with hot water). One can evaluate this at three distinct steps in the cupping process: (1) sniffing the grounds placed into the cup before pouring water onto the coffee; (2) sniffing the aromas released while breaking the crust; and (3) sniffing the aromas released as the coffee steeps. Specific aromas can be noted under "qualities" and the intensity of the dry, break, and wet aroma aspects noted on the 5-point vertical scales. The score finally given should reflect the preference of all three aspects of a sample's Fragrance/Aroma.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Flavor</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Flavor represents the coffee's principal character, the "mid-range" notes, in between the first impressions given by the coffee's first aroma and acidity to its final aftertaste. It is a combined impression of all the gustatory (taste bud) sensations and retro-nasal aromas that go from the mouth to nose. The score given for Flavor should account for the intensity, quality and complexity of its combined taste and aroma, experienced when the coffee is slurped into the mouth vigorously so as to involve the entire palate in the evaluation.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Aftertaste</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Aftertaste is defined as the length of positive flavor (taste and aroma) qualities emanating from the back of the palate and remaining after the coffee is expectorated or swallowed. If the aftertaste were short or unpleasant, a lower score would be given.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Acidity</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Acidity is often described as "brightness" when favorable or "sour" when unfavorable. At its best, acidity contributes to a coffee's liveliness, sweetness, and fresh-fruit character and is almost immediately experienced and evaluated when the coffee is first slurped into the mouth. Acidity that is overly intense or dominating may be unpleasant, however, and excessive acidity may not be appropriate to the flavor profile of the sample. The final score marked on the horizontal tick-mark scale should reflect the panelist's perceived quality for the Acidity relative to the expected flavor profile based on origin characteristics and/or other factors (degree of roast, intended use, etc.). Coffees expected to be high in Acidity, such as a Kenya coffee, or coffees expected to be low in Acidity, such as a Sumatra coffee, can receive equally high preference scores although their intensity rankings will be quite different.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Body</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>The weight and texture of the coffee in your mouth. This is determined by the amount of oils and suspended solids. Higher scores indicate a fuller, richer body.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Balance</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>How well all the flavor components work together harmoniously. A well-balanced coffee has no single dominant flavor that overwhelms others. Higher scores indicate excellent harmony between all elements.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Sweetness</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Sweetness refers to a pleasing fullness of flavor as well as any obvious sweetness and its perception is the result of the presence of certain carbohydrates. The opposite of sweetness in this context is sour, astringency or "green" flavors. This quality may not be directly perceived as in sucrose-laden products such as soft drinks, but will affect other flavor attributes. 2 points are awarded for each cup displaying this attribute for a maximum score of 10 points.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Clean Cup</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Clean Cup refers to a lack of interfering negative impressions from first ingestion to final aftertaste, a "transparency" of cup. In evaluating this attribute, notice the total flavor experience from the time of the initial ingestion to final swallowing or expectoration. Any non-coffee like tastes or aromas will disqualify an individual cup. 2 points are awarded for each cup displaying the attribute of Clean Cup.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Uniformity</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>Uniformity refers to consistency of flavor of the different cups of the sample tasted. If the cups taste different, the rating of this aspect would not be as high. 2 points are awarded for each cup displaying this attribute, with a maximum of 10 points if all 5 cups are the same.</p>
+                </div>
+            </div>
+
+            <div class="metric-detail">
+                <div class="metric-header" onclick="this.querySelector('.metric-toggle').classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h3>Moisture</h3>
+                    <div class="metric-toggle">▼</div>
+                </div>
+                <div class="metric-content">
+                    <p>The percentage of water content in the green (unroasted) coffee beans. Proper moisture levels are essential for consistent roasting and flavor development. Optimal levels typically range from 10-13%.</p>
+                </div>
+            </div>
+
+            <button class="metrics-details-close" onclick="window.coffeeMapInstance.closeMetricsDetails()">Close</button>
         </div>
     </div>
 
@@ -622,16 +848,18 @@
         <div>
             <a href="#" onclick="window.coffeeMapInstance.showSources(); return false;">Sources</a>
             |
+            <a href="#" onclick="window.coffeeMapInstance.showMetricsDetails(); return false;">Metrics</a>
+            |
             <a href="#" onclick="window.coffeeMapInstance.showWelcome(); return false;">Help</a>
             |
-            <span>Built by: <strong><a href="https://www.linkedin.com/in/YOUR-USERNAME/" target="_blank" style="color: #D9B18C; text-decoration: none;">Your Name</a></strong></span>
+            <span><a style="color: #D9B18C; text-decoration: none;">Built by:</a> <strong><a href="https://www.linkedin.com/in/andrewplattel/" target="_blank" style="color: #D9B18C; text-decoration: none;">Andrew Plattel</a></strong></span>
         </div>
     </footer>
 
     <script>
         // Configuration
         const CONFIG = {
-            csvPath: 'coffee-quality-database/data/arabica_data_cleaned.csv',
+            csvPath: 'combined_coffee_data.csv',
             worldGeoJsonPath: 'world.geojson',
             regionsGeoJsonPath: 'coffee_regions.geojson',
             
@@ -650,8 +878,10 @@
             metricColumns: ['Acidity', 'Aftertaste', 'Aroma', 'Balance', 'Body', 'Clean.cup', 'Flavor', 'Moisture', 'Sweetness', 'Uniformity']
         };
 
-        // CSV region to GeoJSON region mappings
         const REGION_MAPPINGS = {
+            // Angola
+            'kwanza norte province, angola': 'KwanzaNorte',
+
             // Brazil
             'south of minas': 'MinasGerais',
             'vale da grama': 'MinasGerais',
@@ -715,6 +945,21 @@
             'naranjo': 'Alajuela',
             'brunca': 'Puntarenas',
             'san rafael': 'Heredia',
+
+            //Cote d'Ivoire
+            'cnra station of divo': 'Gôh-Djiboua',
+
+            // Ecuador
+            'san juan, playas': 'Pichincha',
+            'province of manabi, ecuador': 'Manabi',
+
+            // El Salvador
+            'santa ana': 'SantaAna',
+            'el balsamo, quezaltepec': 'SanSalvador',
+            'apaneca': 'Ahuachapán',
+            'ataco, apaneca - ilamatepec mountain range': 'Ahuachapán',
+            'department of ahuachapan, municipality of apan': 'Ahuachapán',
+            'cacahuatique': 'SanMiguel',
             
             // Ethiopia
             'guji-hambela': 'Oromia',
@@ -780,6 +1025,10 @@
             
             // India
             'chickmangalore': 'Karnataka',
+            'chikmagalur': 'Karnataka',
+            'chikmagalur karnataka indua': 'Karnataka',
+            'chikmagalur karnataka india': 'Karnataka',
+            'chikmagalur karnataka': 'Karnataka',
             
             // Indonesia
             'sulawesi': 'SulawesiSelatan',
@@ -980,6 +1229,40 @@
             'iwala village, mbeya rural': 'Mbeya',
             'manyara, karatu': 'Manyara',
             'mkuu rombo': 'Kilimanjaro',
+
+            // Taiwan
+            'leye, alishan township, chiayi county': 'Chiayi',
+            'natou county': 'Nantou',
+            'dongshan dist., tainan city 臺南市東山區': 'Tainan',
+            'taichung xinshe 台中市新社區': 'Taichung',
+            'mountain ali, taiwan': 'Chiayi',
+            '國姓鄉 guoshing township': 'Nantou',
+            'nanxi dist., tainan city 臺南市楠西區': 'Tainan',
+            'leye, alishan township, chiayi county 嘉義阿里山樂野村': 'Chiayi',
+            '台灣': 'Chiayi',
+            '台中和平區': 'Taichung',
+            '台南市東山區 (dongshan dist., tainan city)': 'Tainan',
+            '南投國姓': 'Nantou',
+            'chiayi alishan 嘉義縣阿里山鄉': 'Chiayi',
+            '嘉義阿里山': 'Chiayi',
+            '台東太麻里': 'Taitung',
+            '台南市東山區( dongshan dist., tainan city)': 'Tainan',
+            'changhua baguashan 彰化市八卦山': 'Changhua',
+            'nantou': 'Nantou',
+            'yunlin 雲林縣石壁': 'Yunlin',
+            '古坑鄉荷包村尖山坑60號': 'Yunlin',
+            '苗栗三灣': 'Miaoli',
+            'dongshan dist., tainan city 台南市東山區': 'Tainan',
+            'taiwan': 'Chiayi',
+            '台中新社': 'Taichung',
+            'taichung taiping 台中市太平區': 'Taichung',
+            'new taipei zhonghe 新北市中和區': 'NewTaipei',
+            'chiayi fanlu嘉義縣番路鄉': 'Chiayi',
+            '苗栗泰安': 'Miaoli',
+            'yunlin gukeng he bao 雲林縣古坑鄉荷苞村': 'Yunlin',
+            'taiwu township , pingtung county 屏東縣泰武鄉': 'Pingtung',
+            'baihe dist., tainan city 臺南市白河區': 'Tainan',
+            'taiwan': 'Taiwan',
             
             // Thailand
             'chiang rai': 'ChiangRai',
@@ -1002,6 +1285,12 @@
             'west nile': 'Arua',
             'kasese, mt. rwenzori': 'Kasese',
             'mt elgon': 'Kapchorwa',
+            'sheema south western': 'Kasese',
+            'luwero central region': 'Kampala',
+            'central': 'Kapchorwa',
+            'western': 'Kasese',
+            'iganga namadrope eastern': 'Mbale',
+            'south western': 'Kasese',
             
             // United States (Hawaii)
             'kona': 'Hawaii',
@@ -1020,11 +1309,16 @@
             'mubuyu estate': 'Central'
         };
 
-        // Close sources modal when clicking outside of it
+        // Close modals when clicking outside
         window.addEventListener('click', (event) => {
-            const modal = d3.select('#sources-modal').node();
-            if (event.target === modal) {
+            const sourcesModal = d3.select('#sources-modal').node();
+            if (event.target === sourcesModal) {
                 window.coffeeMapInstance.closeSources();
+            }
+            
+            const metricsModal = d3.select('#metrics-details-modal').node();
+            if (event.target === metricsModal) {
+                window.coffeeMapInstance.closeMetricsDetails();
             }
             
             const welcomeModal = d3.select('#welcome-modal').node();
@@ -1033,11 +1327,11 @@
             }
         });
 
-        // Bad data mappings to exclude (mapped to wrong country)
+        // Bad data mappings to exclude
         const EXCLUDE_REGION_MAPPINGS = new Set([
-            'antioquia',      // Colombia region, not US
-            'berastagi',      // Indonesia region, not US
-            'central america' // Regional label, not a US state
+            'antioquia',
+            'berastagi',
+            'central america'
         ]);
 
         // Country name mappings
@@ -1063,7 +1357,7 @@
             "Papua New Guinea", "Peru", "Philippines", "Rwanda", "Samoa", "Sierra Leone",
             "Solomon Islands", "South Africa", "Sri Lanka", "Tajikistan", "Tanzania",
             "Thailand", "Timor-Leste", "Togo", "Tonga", "Turkmenistan", "Tuvalu",
-            "Uganda", "Uzbekistan", "Vanuatu", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+            "Uganda", "United States of America", "Uzbekistan", "Vanuatu", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
         ]);
 
         // Normalize names for matching
@@ -1103,7 +1397,7 @@
                 this.path = d3.geoPath().projection(this.projection);
                 
                 this.zoom = d3.zoom()
-                    .scaleExtent([1, 8])
+                    .scaleExtent([1, 32])
                     .on('zoom', (event) => {
                         this.g.attr('transform', event.transform);
                     });
@@ -1277,12 +1571,10 @@
                     }
                 });
                 
-                // Filter out bad data entries
                 this.coffeeData = this.coffeeData.filter(d => {
                     const region = d[CONFIG.regionColumn].toLowerCase().trim();
                     const country = d[CONFIG.countryColumn];
                     
-                    // Exclude records with US as country but invalid regions
                     if (country === 'United States of America') {
                         if (EXCLUDE_REGION_MAPPINGS.has(region)) {
                             return false;
@@ -1361,7 +1653,6 @@
                     this.matchesCountry(f.properties[CONFIG.regionCountryProperty], countryName)
                 );
                 
-                // Special handling for United States of America
                 if (countryName === 'United States of America' && countryRegions.length === 0) {
                     countryRegions = this.regionsData.features.filter(f => 
                         this.matchesCountry(f.properties[CONFIG.regionCountryProperty], 'UnitedStates')
@@ -1374,7 +1665,6 @@
                     return;
                 }
                 
-                // Apply filters to the data BEFORE aggregating
                 const filteredData = this.applyFilters(this.coffeeData);
                 const countryFilteredData = filteredData.filter(d => d[CONFIG.countryColumn] === countryName);
                 
@@ -1449,7 +1739,6 @@
             }
             
             aggregateRegionData(countryName, countryData = null) {
-                // Use the provided filtered country data, or get all data for the country
                 const dataToAggregate = countryData || this.dataByCountry.get(countryName);
                 
                 if (!dataToAggregate || dataToAggregate.length === 0) {
@@ -1488,7 +1777,6 @@
             mapRegionName(csvRegion) {
                 const normalized = csvRegion.toLowerCase().trim();
                 
-                // Check if this is a bad mapping we should exclude
                 if (EXCLUDE_REGION_MAPPINGS.has(normalized)) {
                     return null;
                 }
@@ -1619,7 +1907,6 @@
             
             handleCountryClick(event, d) {
                 const countryName = d.properties[CONFIG.worldCountryProperty];
-                console.log('Clicking country:', countryName, 'Active filters:', this.filters);
                 this.drawRegionMap(countryName);
             }
 
@@ -1660,7 +1947,6 @@
                     .domain([0, 10])
                     .range(['#D9B18C', '#875E3E']);
 
-                // Add color legend with gradient
                 const legendBox = metricsContent.append('div').attr('class', 'metric-box');
                 legendBox.append('h4').text('Score Scale');
                 const legendContent = legendBox.append('div').style('display', 'flex').style('align-items', 'center').style('gap', '10px');
@@ -1696,10 +1982,11 @@
                 
                 regionData.forEach((roast, index) => {
                     const item = roastBox.append('div').attr('class', 'roast-item');
+                    const farmName = roast[CONFIG.farmColumn] && roast[CONFIG.farmColumn].toLowerCase() !== 'nan' ? roast[CONFIG.farmColumn] : 'Unknown';
                     item.style('cursor', 'pointer')
                         .on('click', () => this.showRoastDetails(roast, regionName))
                         .html(`
-                            <strong>${roast[CONFIG.farmColumn]}</strong><br/>
+                            <strong>Producing Farm: ${farmName}</strong><br/>
                             Score: ${roast[CONFIG.scoreColumn]} | Bags Produced: ${roast[CONFIG.bagsColumn]}
                         `);
                 });
@@ -1726,6 +2013,7 @@
                 const roastBox = metricsContent.append('div').attr('class', 'metric-box');
                 roastBox.append('h4').text('Roast Details');
 
+                const farmName = roast[CONFIG.farmColumn] && roast[CONFIG.farmColumn].toLowerCase() !== 'nan' ? roast[CONFIG.farmColumn] : 'Unknown';
                 const detailsHtml = `
                     <div><strong>Farm:</strong> ${roast[CONFIG.farmColumn]}</div>
                     <div><strong>Country:</strong> ${roast[CONFIG.countryColumn]}</div>
@@ -1740,7 +2028,6 @@
                     .domain([0, 10])
                     .range(['#D9B18C', '#875E3E']);
 
-                // Add color legend
                 const legendBox = metricsContent.append('div').attr('class', 'metric-box');
                 legendBox.append('h4').text('Score Scale');
                 const legendContent = legendBox.append('div').style('display', 'flex').style('align-items', 'center').style('gap', '10px');
@@ -1791,6 +2078,14 @@
 
             closeSources() {
                 d3.select('#sources-modal').style('display', 'none');
+            }
+
+            showMetricsDetails() {
+                d3.select('#metrics-details-modal').style('display', 'flex');
+            }
+
+            closeMetricsDetails() {
+                d3.select('#metrics-details-modal').style('display', 'none');
             }
 
             closeWelcome() {
